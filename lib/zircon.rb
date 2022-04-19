@@ -96,9 +96,12 @@ class Zircon
   # (xxx is determined by the command type of the message)
   def wait_message
     loop do
-      message = Message.new(gets)
+      input = gets
+      next if input.nil? || input.strip.empty?
+      message = Message.new(input)
       next if message == :invalid_message
       trigger_message(message)
+      next if message.type.empty?
       send("trigger_#{message.type}", message)
     end
   end
